@@ -378,25 +378,45 @@ task usercontrol()
 	while (true)
 	{
 
-	//this driver control looks kinda funky, it is modified with a deadzone because our remote is old
-		int deadthresh = 20;
+	void robotDrive() //thanks to jpearman for helping us when our drivercontrol was acting funky
+{
+    short   forward, turn;
+    long    drive_l_front;
+    long    drive_l_back;
+    long    drive_r_front;
+    long    drive_r_back;
 
-		if ((vexRT[Ch3] + vexRT[Ch1] > deadthresh) || (vexRT[Ch3] + vexRT[Ch1] < deadthresh) ||
-			(vexRT[Ch3] - vexRT[Ch1] > deadthresh) || (vexRT[Ch3] - vexRT[Ch1]  < deadthresh))
-		{
-			motor[leftFront] = vexRT[Ch3] + vexRT[Ch1];
-			motor[leftBack] = vexRT[Ch3] + vexRT[Ch1];
-			motor[rightFront] = vexRT[Ch3] - vexRT[Ch1];
-			motor[rightBack] = vexRT[Ch3] - vexRT[Ch1];
-		}
-		else
-		{
-			motor[leftFront] = 0;
-			motor[leftBack] = 0;
-			motor[rightFront] = 0;
-			motor[rightBack] = 0;
-		}
+    // Get controller, Arcade drive using Ch3 and Ch4
+    if( abs( vexRT[ Ch3 ] ) > 10 )
+        forward = vexRT[ Ch3 ];
+    else
+        forward = 0;
 
+    if( abs( vexRT[ Ch4 ] ) > 10 )
+        turn   = vexRT[ Ch4 ];
+    else
+        turn = 0;
+
+    // Set drive variables
+    drive_l_front = forward + turn;
+    drive_l_back  = forward + turn;
+
+    drive_r_front = forward - turn;
+    drive_r_back  = forward - turn;
+
+    // Normally I would clip these values in some
+    // way here, but this is simple code so I will leave that
+    // out.
+
+    // Send to motors
+    // left drive
+    motor[ MotorLF ] =  drive_l_front;
+    motor[ MotorLB ] =  drive_l_back;
+
+    // right drive
+    motor[ MotorRF ] =  drive_r_front;
+    motor[ MotorRB ] =  drive_r_back;
+}
 
 		//launcher buttons
 		if((vexRT[Btn5U] == 1))
