@@ -31,46 +31,12 @@
 //-----------------------------------------------------------------------------
 
 //Tasks/Functions/Gyro section
-void robotDrive() //thanks to jpearman for helping us when our drivercontrol was acting funky
-{
-    short   forward, turn;
-    long    drive_l_front;
-    long    drive_l_back;
-    long    drive_r_front;
-    long    drive_r_back;
 
-    // Get controller, Arcade drive using Ch3 and Ch4
-    if( abs( vexRT[ Ch3 ] ) > 10 )
-        forward = vexRT[ Ch3 ];
-    else
-        forward = 0;
-
-    if( abs( vexRT[ Ch4 ] ) > 10 )
-        turn   = vexRT[ Ch4 ];
-    else
-        turn = 0;
-
-    // Set drive variables
-    drive_l_front = forward + turn;
-    drive_l_back  = forward + turn;
-
-    drive_r_front = forward - turn;
-    drive_r_back  = forward - turn;
-
-    // Normally I would clip these values in some
-    // way here, but this is simple code so I will leave that
-    // out.
-
-    // Send to motors
-    // left drive
-    motor[ leftFront ] =  drive_l_front;
-    motor[ leftBack ] =  drive_l_back;
-
-    // right drive
-    motor[ rightFront ] =  drive_r_front;
-    motor[ rightBack ] =  drive_r_back;
-}
-
+//short   forward, turn;
+  //  long    drive_l_front;
+   // long    drive_l_back;
+    //long    drive_r_front;
+   // long    drive_r_back;
 void BasicDrive(int left, int right, int revs)
 {
 	SensorValue[leftEncoder] = 0;
@@ -416,8 +382,40 @@ task usercontrol()
 
 	while (true)
 	{
-	//call the driving function
-	robotDrive();
+//thanks to jpearman for helping us when our drivercontrol was acting funky
+    short   forward, turn;
+    long    drive_l_front;
+    long    drive_l_back;
+    long    drive_r_front;
+    long    drive_r_back;
+
+    // Get controller, Arcade drive using Ch3 and Ch4
+    if( abs( vexRT[ Ch3 ] ) > 10 )
+        forward = vexRT[ Ch3 ];
+    else
+        forward = 0;
+
+    if( abs( vexRT[ Ch4 ] ) > 10 )
+        turn   = vexRT[ Ch4 ];
+    else
+        turn = 0;
+
+    // Set drive variables
+    drive_l_front = forward + turn;
+    drive_l_back  = forward + turn;
+
+    drive_r_front = forward - turn;
+    drive_r_back  = forward - turn;
+
+
+    // Send to motors
+    // left drive
+    motor[ leftFront ] =  drive_l_front;
+    motor[ leftBack ] =  drive_l_back;
+
+    // right drive
+    motor[ rightFront ] =  drive_r_front;
+    motor[ rightBack ] =  drive_r_back;
 
 		//launcher buttons
 		if((vexRT[Btn5U] == 1))
