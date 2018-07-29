@@ -410,12 +410,12 @@ task usercontrol()
 
     // Send to motors
     // left drive
-    motor[ MotorLF ] =  drive_l_front;
-    motor[ MotorLB ] =  drive_l_back;
+    motor[ leftFront ] =  drive_l_front;
+    motor[ leftBack ] =  drive_l_back;
 
     // right drive
-    motor[ MotorRF ] =  drive_r_front;
-    motor[ MotorRB ] =  drive_r_back;
+    motor[ rightFront ] =  drive_r_front;
+    motor[ rightBack ] =  drive_r_back;
 }
 
 		//launcher buttons
