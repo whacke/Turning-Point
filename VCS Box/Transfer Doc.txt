@@ -1,0 +1,47 @@
+bool flybutton = false;
+int flypower = 200;
+int flycount = 1;
+int flynew;
+
+
+
+
+LeftFront.spin(directionType::fwd, (Controller1.Axis1.value() + Controller1.Axis3.value()), velocityUnits::pct); //(Axis3+Axis4)/2;
+        LeftBack.spin(directionType::fwd, (Controller1.Axis1.value() + Controller1.Axis3.value()), velocityUnits::pct);
+        RightFront.spin(directionType::fwd, (Controller1.Axis1.value() - Controller1.Axis3.value()), velocityUnits::pct);//(Axis3-Axis4)/2;
+        RightBack.spin(directionType::fwd, (Controller1.Axis1.value() - Controller1.Axis3.value()), velocityUnits::pct);
+        task::sleep(20);
+    if(Controller1.ButtonUp.pressing())
+    {
+        flybutton = true;
+    }
+    else if (Controller1.ButtonDown.pressing())
+    {
+        flybutton = false;
+    }
+    
+    if(flybutton == true)
+    {
+        flypower = 200;
+        Flywheel.spin(directionType::fwd, flypower, velocityUnits::rpm);
+    }
+    else if (flybutton == false)
+    {
+        flynew = flypower;
+        flycount = 0;
+        while(flynew > 0)
+        {
+        LeftFront.spin(directionType::fwd, (Controller1.Axis1.value() + Controller1.Axis3.value()), velocityUnits::pct); //(Axis3+Axis4)/2;
+        LeftBack.spin(directionType::fwd, (Controller1.Axis1.value() + Controller1.Axis3.value()), velocityUnits::pct);
+        RightFront.spin(directionType::fwd, (Controller1.Axis1.value() - Controller1.Axis3.value()), velocityUnits::pct);//(Axis3-Axis4)/2;
+        RightBack.spin(directionType::fwd, (Controller1.Axis1.value() - Controller1.Axis3.value()), velocityUnits::pct);
+        task::sleep(20);
+            Flywheel.spin(directionType::fwd, flynew, velocityUnits::rpm);
+            flynew = flypower - flycount;
+            ++flycount;
+            task::sleep(75);
+        }
+        
+        flypower = 0;
+    }
+} 
