@@ -1,10 +1,12 @@
 #include "main.h"
 
 //Motor section begins
-Motor intake = 2_rmtr;
-Motor puncher = 1_rmtr;
-Motor angler = 4_rmtr;
+Motor intake = 2_mtr;
+Motor puncher = 1_mtr;
+Motor angler = 4_mtr;
 Motor scraper = 6_rmtr;
+intake.setGearing(AbstractMotor::gearset::blue);
+angler.setGearing(AbstractMotor::gearset::blue);
 //Motor section ends
 //Section sensor begins
 pros::ADILineSensor intakeSense('G');
@@ -59,6 +61,7 @@ pros::delay(20);
 }
 
 
+
 void intakeWatchdog() {
    while(1) {
    if(ballIntake == true && ballPuncher == true)
@@ -96,8 +99,10 @@ void intakeWatchdog() {
 void opcontrol() {
 	Controller controller;
   bool rollBack = false;
+  angler.tarePosition();
 while(true)
 {
+
 	drive.arcade((controller.getAnalog(ControllerAnalog::rightX)*1),
   controller.getAnalog(ControllerAnalog::leftY));
 
@@ -106,50 +111,54 @@ while(true)
               if(ballIntake == true && ballPuncher == true)
               {
                   rollBack = true;
-                  intake.move_velocity(0);
+                  intake.moveVelocity(0);
               }
               else
               {
                   while(rollBack == true)
                   {
-                      intake.move_relative(-200, -50);
+                      intake.moveRelative(200, -50);
                       rollBack = false;
                       pros::delay(20);
                   }
-                  intake.move_velocity(-200);
+                  intake.moveVelocity(200);
               }
           }
           else if(intakeOutButton.isPressed())
            {
-             intake.move_velocity(88);
+             intake.moveVelocity(-88);
            }
            else
            {
-               intake.move_velocity(0);
+               intake.moveVelocity(0);
            }
-          if(puncherUp.isPressed())
+  if(puncherUp.isPressed())
           {
-              if(angler.get_position() < 299)
+            //angler.moveVoltage(-200);
+
+      if(angler.getPosition() < 299)
           {
-              angler.move_absolute(590, 600);
-              puncher.move_relative(200, -200);
+              angler.moveAbsolute(590, 600);
+              puncher.moveRelative(175, -200);
           }
-              else
+      else
               {
-                  puncher.move_relative(200, -200);
+                  puncher.moveRelative(200, 200);
               }
           }
-          else if(puncherDown.isPressed())
+   else if(puncherDown.isPressed())
           {
-              if(angler.get_position() > 300)
+          //  angler.moveVelocity(200);
+
+        if(angler.getPosition() > 300)
           {
-              angler.move_absolute(0, 600);
-              puncher.move_relative(175, -200);
+              angler.moveAbsolute(0, 600);
+              puncher.moveRelative(175, -200);
           }
-              else
+        else
               {
                   //Puncher.spin(vex::directionType::fwd,200,vex::velocityUnits::pct);
-                  puncher.move_relative(175, -200);
+                  angler.moveVelocity(0);
               }
           }
           if(puncherDoubleButton.isPressed())
@@ -158,27 +167,27 @@ while(true)
             LeftBack.setStopping(vex::brakeType::hold);
             RightFront.setStopping(vex::brakeType::hold);
             RightBack.setStopping(vex::brakeType::hold);*/
-        puncher.move_relative(175, -200);
-        intake.move_velocity(-200);
-        puncher.move_velocity(200);
-        if(angler.get_position() < 299 && puncherDoubleButton.isPressed())
+        puncher.moveRelative(175, -200);
+        intake.moveVelocity(200);
+        puncher.moveVelocity(-200);
+        if(angler.getPosition() < 299 && puncherDoubleButton.isPressed())
           {
-            angler.move_absolute(590, 600);
+            angler.moveAbsolute(590, 600);
           }
-          else if(angler.get_position() > 300 && puncherDoubleButton.isPressed())
+          else if(angler.getPosition() > 300 && puncherDoubleButton.isPressed())
           {
-             angler.move_absolute(0, 600);
+             angler.moveAbsolute(0, 600);
           }
               pros::delay(500);
-              puncher.move_velocity(0);
+              puncher.moveVelocity(0);
      }
      else if(puncherSwitch.isPressed())
      {
-         puncher.move_velocity(0);
+         puncher.moveVelocity(0);
      }
         else
       {
-      puncher.move_velocity(200);
+      puncher.moveVelocity(-200);
       }
 
 pros::Task::delay(10);
