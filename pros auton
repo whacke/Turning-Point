@@ -17,7 +17,8 @@ const int rightBack = -8;
  * from where it left off.
  */
  auto autonDrive = ChassisControllerFactory::create(
-   {leftFront, leftBack}, {rightFront, rightBack},
+   {leftFront, leftBack},
+   {rightFront, rightBack},
    AbstractMotor::gearset::green,
    {4.125_in, 13.75_in}
  );
@@ -32,10 +33,12 @@ const int rightBack = -8;
 
 void autonomous() {
 
-  profileController.generatePath({Point{0_ft, 0_ft, 0_deg}, Point{3_ft, 0_ft, 0_deg}}, "A");
-  pros::delay(500);
-    profileController.setTarget("A");
-    profileController.waitUntilSettled();
+  //profileController.generatePath({Point{0_ft, 0_ft, 0_deg}, Point{3_ft, 0_ft, 0_deg}}, "A");
+  //pros::delay(500);
+  //  profileController.setTarget("A");
+  //  profileController.waitUntilSettled();
+ autonDrive.moveDistance(1000);
+
 
 
 }
